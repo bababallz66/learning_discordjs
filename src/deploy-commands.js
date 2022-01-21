@@ -17,6 +17,9 @@ const commands = [
   new SlashCommandBuilder()
     .setName("test")
     .setDescription("Replies with a button"),
+    new SlashCommandBuilder()
+    .setName("profil")
+    .setDescription("Replies with a button"),
 ].map((command) => command.toJSON());
 
 const rest = new REST({ version: "9" }).setToken(DISCORD_TOKEN);
