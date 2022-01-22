@@ -10,12 +10,29 @@ const token = process.env.DISCORD_TOKEN;
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
-
 client.once("ready", () => {
   console.log("Ready!");
 });
 
-
+const ProfileMenu = new MessageActionRow().addComponents(
+  new MessageSelectMenu()
+    .setCustomId("select")
+    .setPlaceholder("Where do you want to go ?")
+    .addOptions([
+      {
+        label: "Stats",
+        description: "Statistique",
+        value: "🧬Stats🧬",
+        emoji:"🧬"
+      },
+      {
+        label: "Inventory",
+        description: "Inventaire",
+        value: "🎒Inventory🎒",
+        emoji:"🎒"
+      },
+    ])
+);
 
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isCommand()) return;
@@ -26,12 +43,12 @@ client.on("interactionCreate", async (interaction) => {
     await interaction.reply("I love U too ! <3");
   } else if (commandName === "baka") {
     await interaction.reply("No U Baka <3");
-  }else if (commandName === "user") {
+  } else if (commandName === "user") {
     await interaction.reply(
       `Your tag: ${interaction.user.tag}\nYour id: ${interaction.user.id}`
     );
   } else if (commandName === "test") {
-    const row = new MessageActionRow().addComponents(
+    const Button = new MessageActionRow().addComponents(
       new MessageButton()
         .setCustomId("primary")
         .setLabel("Attaquer")
@@ -46,61 +63,27 @@ client.on("interactionCreate", async (interaction) => {
         .setStyle("DANGER")
     );
 
-    await interaction.reply({ content: "test!", components: [row] });
-    
+    await interaction.reply({ content: "test!", components: [Button] });
   }
-  if (commandName === "profil") {
-    const row = new MessageActionRow().addComponents(
-       new MessageSelectMenu()
-        .setCustomId("select")
-        .setPlaceholder("Where do you want to go ?")
-        .addOptions([
-          {
-            label: "Stats",
-            description: "Statistique",
-            value: "first_option",
-          },
-          {
-            label: "Inventory",
-            description: "Inventaire",
-            value: "second_option",
-            
-          },
-        ])
-    );
-
+  if (commandName === "profileuwu") {
     await interaction.reply({
       content: "Bienvenu sur votre profil !",
-      components: [row],
-      
-    });
-    client.on("interactionCreate", async (interaction) => {
-      if (!interaction.isSelectMenu()) return;
-      
-      const collector = interaction.channel.createMessageComponentCollector({ componentType: 'SELECT_MENU', time: 15000 });
-      
-    
-      collector.on('collect', i => {
-        if (i.user.id === interaction.user.id){
-          i.reply(`${i.user.id} clicked on the ${i.customId} button.`);
-        } else {
-          i.reply({ content: 'these buttons arent for you', ephemeral: true});
-        }
-      });
-      collector.on('end',collected => {
-        console.log(`Collected ${collected.size} interactions.`);
-      });
-      if (interaction.customId === "select") {
-        await interaction.update({
-          content: "Something was selected!",
-          components: [row],
-          
-        });
-      }
+      components: [ProfileMenu],
     });
   }
 });
 
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isSelectMenu()) return;
+  if (interaction.customId === "select") {
+    await interaction.update({
+      content: `${interaction.values[0]}`,
+      components: [ProfileMenu],
+    });
+  }
+
+  
+});
 
 
 client.login(token);

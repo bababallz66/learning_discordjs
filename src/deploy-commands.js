@@ -18,7 +18,7 @@ const commands = [
     .setName("test")
     .setDescription("Replies with a button"),
     new SlashCommandBuilder()
-    .setName("profil")
+    .setName("profileuwu")
     .setDescription("Replies with a button"),
 ].map((command) => command.toJSON());
 
