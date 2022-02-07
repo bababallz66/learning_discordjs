@@ -1,3 +1,7 @@
 node_modules/
-
+.swc/
+types/
 .env
+database.db
+dist/
+Monstres.txt
