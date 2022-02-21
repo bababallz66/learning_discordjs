@@ -1,8 +1,9 @@
 import { EntityManager } from "@mikro-orm/sqlite";
-import { Message } from "discord.js";
 import { container } from "tsyringe";
 import { ICommand } from "wokcommands";
 import { Profile } from "../models/Profile";
+import { RaceMenu } from "../menu/RaceMenu";
+import { getUserSession } from "../SessionHolder";
 
 const accountCommand: ICommand = {
   category: "Testing",
@@ -12,14 +13,8 @@ const accountCommand: ICommand = {
 
   callback: async ({ message, channel, interaction }) => {
     const entityManager = container.resolve(EntityManager);
-    let playerLevel = interaction.options.getInteger("level");
-    let playerDescription = interaction.options.getString("description");
-    const player = new Profile(
-      interaction.user.id,
-      interaction.user.username,
-      playerDescription ?? undefined,
-      playerLevel ?? undefined
-    );
+    const session = getUserSession(interaction.user.id);
+
     const namez = await entityManager.findOne(Profile, {
       name: interaction.user.id,
     });
@@ -31,16 +26,11 @@ const accountCommand: ICommand = {
       );
       return;
     }
-
-    try {
-      entityManager.persistAndFlush(player);
-      await interaction.reply(
-        `Welcome ${interaction.user.username}, in the UwU family ! Your account has been created safely. You will now join the world of Alfheim as a LvL 1 adventurer, Have a nice day !`
-      );
-    } catch (error: any) {
-      console.error(error);
-      await interaction.reply("Something went wrong with creating your account.");
-    }
+    interaction.reply({
+      content: "Choose your race !",
+      components: [RaceMenu],
+      ephemeral: true
+    });
   },
 };
 export default accountCommand;

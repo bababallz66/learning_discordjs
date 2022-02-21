@@ -13,8 +13,9 @@ const descriptionCommand: ICommand = {
   callback: ({ message, channel, interaction }) => {
     interaction.reply({
       content: "Enter your description:",
+      ephemeral: true
     });
-
+    
     const collector = channel.createMessageCollector({
       filter: (collectorMessage: Message<boolean>) =>
         collectorMessage.author.id === interaction.user.id,
@@ -24,6 +25,7 @@ const descriptionCommand: ICommand = {
 
     collector.on("collect", (message) => {
       console.log(message.content);
+      message.delete()
     });
     
     collector.on("end", async (collected) => {
@@ -35,11 +37,10 @@ const descriptionCommand: ICommand = {
         return;
       }
       const newDescription = message.content;
-      let text = "Collected:\n\n";
-
-      interaction.editReply({
-        content: text + newDescription,
+      await interaction.editReply({
+        content: `Your new description is Description : ${newDescription}`
       });
+      
       const entityManager = container.resolve(EntityManager);
       const player = await entityManager.findOne(Profile, {
         name: interaction.user.id,

@@ -2,7 +2,7 @@ import { MessageActionRow, MessageSelectMenu } from "discord.js";
 
 export const ProfileMenu = new MessageActionRow().addComponents(
   new MessageSelectMenu()
-    .setCustomId("select")
+    .setCustomId("selectprofile")
     .setPlaceholder("Where do you want to go ?")
     .addOptions([
       {
