@@ -61,10 +61,48 @@ async function init() {
     const session = getUserSession(interaction.user.id);
 
     if (interaction.customId === "selectprofile") {
-      await interaction.update({
-        content: `${interaction.values[0]}`,
-        components: [ProfileMenu],
+      const entityManager = container.resolve(EntityManager);
+      const player = await entityManager.findOne(Profile, {
+        name: interaction.user.id,
       });
+      if (player === null) {
+        // message d'erreur ou peu importe
+        return;
+      }
+      if (interaction.values[0] === "🧍Profile🧍") {
+        let profilecontent = `${interaction.values[0]} 
+        Username : ${player.username}
+        Race : ${player.race}
+        Job :${player.job}
+        Description :${player.description}
+        Level : ${player.level}
+        `;
+        await interaction.update({
+          content: `${profilecontent}`,
+         components: [ProfileMenu],
+      });
+    }
+      if (interaction.values[0] === "🎒Inventory🎒" ) {
+        let profilecontent = `Your items :
+        `;
+        await interaction.update({
+          content: `${profilecontent}`,
+         components: [ProfileMenu],
+      });
+    }
+      if (interaction.values[0] === "🧬Stats🧬") {
+        let profilecontent = `${interaction.values[0]}
+        Strength : 
+        Agility : 
+        Mana :
+        Vitality :
+        Luck :`
+        ;
+        await interaction.update({
+          content: `${profilecontent}`,
+         components: [ProfileMenu],
+      });
+      };
     }
 
     if (interaction.customId === "selectrace") {

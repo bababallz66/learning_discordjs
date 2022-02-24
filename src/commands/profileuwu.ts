@@ -9,7 +9,7 @@ const profileuwuCommand: ICommand = {
 
   callback: async ({ message, channel, interaction }) => {
     interaction.reply({
-      content: "🧍Profile🧍",
+      content: "Select a Menu",
       components: [ProfileMenu],
     });
   },
