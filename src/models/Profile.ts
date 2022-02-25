@@ -1,5 +1,4 @@
 import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
-import { threadId } from "worker_threads";
 
 @Entity({ tableName: "profiles" })
 export class Profile {
@@ -21,13 +20,17 @@ export class Profile {
   @Property()
   level!: number;
 
+  @Property()
+  experience!: number;
+
   constructor(
     name: string,
     username: string,
     race: string,
     job: string,
     description: string = "description par defaut",
-    level: number = 1
+    level: number = 1,
+    experience: number = 0
   ) {
     this.name = name;
     this.username = username;
@@ -35,5 +38,6 @@ export class Profile {
     this.job = job;
     this.description = description;
     this.level = level;
+    this.experience = experience;
   }
 }
